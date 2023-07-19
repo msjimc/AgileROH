@@ -18,8 +18,8 @@ This should build the selected application with any errors or warnings stored in
 Windows - Visual Studio
 Create an empty C++ windows console application and select the required source code (*.cpp) and header (*.h) files. 
 AgileROHFinder: 
-AffyEngine.cpp 	CompareRegionList.cpp 	AgileROHFinder.cpp 	GetRegions.cpp 	methods.cpp 	parameters.cpp 	Region.cpp 	SNP.cpp and AffyEngine.h 	CompareRegionList.h 	GetRegions.h 	methods.cpp 	parameters.h 	Region.h 	SNP.h  dirent.h
-AgileROHFilter: AffyEngine.cpp 	CompareRegionList.cpp 	AgileROHFilter.cpp 	GetRegions.cpp 	methods.cpp 	parameters.cpp 	Region.cpp 	SNP.cpp 	VCFFilter.cpp and AffyEngine.h 	CompareRegionList.h 	GetRegions.h 	methods.h 	parameters.h 	Region.h 	SNP.h 	VCFFilter.h  dirent.h
+AffyEngine.cpp, CompareRegionList.cpp, AgileROHFinder.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp, and AffyEngine.h, CompareRegionList.h, GetRegions.h, methods.cpp, parameters.h, Region.h, SNP.h, dirent.h.
+AgileROHFilter: AffyEngine.cpp, CompareRegionList.cpp, AgileROHFilter.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp, VCFFilter.cpp and AffyEngine.h, CompareRegionList.h, GetRegions.h, methods.h, parameters.h, Region.h, SNP.h, VCFFilter.h, dirent.h.
 
 Unlike on Linux systems the dirent.h header files is typically included in the installation, consequently you need to tell Visual Studio to look for a local copy of the dirent.h file. This is done by changing all occurences of:
 #include <dirent.h>  
