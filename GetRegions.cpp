@@ -1,36 +1,5 @@
-#include <fstream>
-#include <iostream>
-#include <istream>
-#include <ostream>
 #include "GetRegions.h"
 
-GetRegions::GetRegions(string folder)
-{
-	DIR *dir;
-	struct dirent *ent;
-	std::string fileName;
-	std::string slash = "/";
-	size_t size = folder.find_last_of("/");
-	size_t len = folder.length();
-	if (size == len - 1)
-	{
-		slash = "";
-	}
-
-	if ((dir = opendir(folder.c_str())) != NULL) {
-		while ((ent = readdir(dir)) != NULL) {
-			fileName = ent->d_name;
-			int index = (int)fileName.rfind(".txt");			 
-			if (fileName.length() > 2 && index > 1)
-			{
-				
-				theFiles.push_back(folder + slash + fileName);
-
-			}
-		}
-		closedir(dir);
-	}
-}
 
 map<string, vector<Region> > GetRegions::GetListOfRegions()
 {

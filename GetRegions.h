@@ -2,8 +2,11 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <dirent.h>
 #include "Region.h"
+
+#include <fstream>
+#include <iostream>
+
 
 using namespace std;
 
@@ -15,6 +18,5 @@ private:
 public:
 	GetRegions() {};
 	~GetRegions() {};
-	GetRegions(string folder);
 	map<string, vector<Region> > GetListOfRegions();
 };
