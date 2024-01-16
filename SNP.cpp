@@ -8,12 +8,11 @@ SNP::~SNP(void)
 {
 }
 
-SNP::SNP(double Distance, std::string Name, std::string Genotype, std::string Chromosome)//, int TheRunsCutOff)
+SNP::SNP(double Distance, std::string Name, std::string Genotype, std::string Chromosome)
 	{
 	SNPState = Unknown;
 	snpDistance = Distance;
 	SNPName = Name;
-	//RunsCutOff = TheRunsCutOff;
 	Failed = false;
 
 	Runs = 0;

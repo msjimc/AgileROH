@@ -40,7 +40,7 @@ void AffyEngine::SortArrays()
 AffyEngine::AffyEngine(void)
 {}
 
-AffyEngine::AffyEngine(const char* dataFilename, parameters p)
+AffyEngine::AffyEngine(const char* dataFilename, parameters p, bool noRS)
 {
 	setValues(p);
 
@@ -53,17 +53,22 @@ AffyEngine::AffyEngine(const char* dataFilename, parameters p)
 		p.iterationNumber = 5;
 		p.RunsCutOffProportion = 100;
 		p.ExclusionCutOffProportion = 700;
-		AffyEngine::ReadBirdSeed(theFilename);
+		status = AffyEngine::ReadBirdSeed(theFilename);
 	}
 	else if (extension == "xls" || extension == "XLS")
 	{ 
 		p.iterationNumber = 5;
 		p.RunsCutOffProportion = 100;
 		p.ExclusionCutOffProportion = 700;
-		AffyEngine::ReadAffyXls(theFilename); 		
+		status = AffyEngine::ReadAffyXls(theFilename); 		
 	}
 	else if (extension == "vcf" || extension == "VCF")
-	{ AffyEngine::ReadVCF(theFilename); }
+	{ status = AffyEngine::ReadVCF(theFilename, noRS); }
+	else
+	{ 
+		status = -1;
+		std::cout << "File names must lave '.vcf', '.txt' or '.xls' file extensions"  << '\n'; 
+	}
 }
 
 AffyEngine::~AffyEngine(void)
@@ -133,6 +138,8 @@ int AffyEngine::ReadBirdSeed(const char* dataFilename)
 		std::vector<int> newCount(26);
 		count = newCount;
 
+		int good = 0;
+		int bad = 0;
 		std::ifstream input(dataFilename);
 		while (std::getline(input, line))
 		{
@@ -164,20 +171,27 @@ int AffyEngine::ReadBirdSeed(const char* dataFilename)
 				counter++;
 			}
 
-			SNP aSNP(cm, name, genotype, chromosome);//, cutOff);
+			SNP aSNP(cm, name, genotype, chromosome);
 			if (aSNP.getFailedData() == false)
 			{
 				AddtoArray(aSNP.getChromosome(), aSNP, count[aSNP.getChromosome()]);
 				count[aSNP.getChromosome()]++;
+			good++;
+			}
+			else 
+			{ 
+				if (aSNP.getChromosome() != 0)
+				{ bad++; }
 			}
 			genotype = "";
 		}
 		input.close();
+		std::cout << "Saved " << good << " SNP and rejected " << bad << " SNPs\n";
 	}
 
 	SortArrays();
-
-	return 1;
+	
+	return 0;
 }
 
 int AffyEngine::ReadAffyXls(const char* dataFilename)
@@ -217,7 +231,7 @@ int AffyEngine::ReadAffyXls(const char* dataFilename)
 				counter++;
 			}
 
-			SNP aSNP(cm, name, genotype, chromosome);//, cutOff);
+			SNP aSNP(cm, name, genotype, chromosome);
 			if (aSNP.getFailedData() == false)
 			{count[aSNP.getChromosome()]++;}
 			genotype = "";
@@ -227,6 +241,8 @@ int AffyEngine::ReadAffyXls(const char* dataFilename)
 		std::vector<int> newCount(26);
 		count = newCount;
 
+		int good = 0;
+		int bad = 0;
 		std::ifstream input(dataFilename);
 		while (std::getline(input, line)) 
 		{
@@ -245,25 +261,31 @@ int AffyEngine::ReadAffyXls(const char* dataFilename)
 				counter++;
 			}
 
-
-			SNP aSNP(cm, name, genotype, chromosome);//, cutOff);
+			SNP aSNP(cm, name, genotype, chromosome);
 			if (aSNP.getFailedData() == false)
 			{
 				AddtoArray(aSNP.getChromosome(), aSNP, count[aSNP.getChromosome()]);
 				count[aSNP.getChromosome()]++;
+				good++;
+			}
+			else 
+			{ 
+				if (aSNP.getChromosome() != 0)
+				{ bad++; }
 			}
 			genotype = "";
 		}
 		input.close();
+		std::cout << "Saved " << good << " SNP and rejected " << bad << " SNPs\n";
 	}
 
-	SortArrays();
+	SortArrays();	
 
-	return 1;
+	return 0;
 }
 
-int AffyEngine::ReadVCF(const char* dataFilename)
-{
+int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
+{		
 	std::ifstream input(dataFilename);
 	if (! input)
 	{
@@ -285,28 +307,29 @@ int AffyEngine::ReadVCF(const char* dataFilename)
 
 		std::string line, item, name, chromosome, genotype;
 		int counter = 0;
-
+		if (noRS == true)
+		{ std:cout << "Including SNP without RS ids\n"; }
+		else
+		{ std::cout << "Ignoring SNPs without RS IDs\n";}
+	
 		while (std::getline(input, line)) 
 		{
 			if(line.substr(0, 1) != "#")
 			{
-
 				counter++;
 				items = methods::Split(line, '\t');
 				name = items.at(SNPRSIndex);
 
-				if (name.substr(0,1) != ".")
-				{
+				if (name.substr(0,1) != "." || noRS == true)
+				{					
 					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth);
 					cm = methods::to_Double(items.at(cmPIndex));
 					chromosome = items.at(ChromoIndex);
 
-					SNP aSNP(cm, name, genotype, chromosome);//, cutOff);
+					SNP aSNP(cm, name, genotype, chromosome);
 					if (aSNP.getFailedData() == false)
-					{count[aSNP.getChromosome()]++;}
-
-				}
-
+					{ count[aSNP.getChromosome()]++; }
+				}				
 			}
 		}
 		input.close();
@@ -315,7 +338,8 @@ int AffyEngine::ReadVCF(const char* dataFilename)
 		count = newCount;
 
 		std::ifstream input(dataFilename);
-
+		int good = 0;
+		int bad = 0;
 		while (std::getline(input, line)) 
 		{
 			if(line.substr(0, 1) != "#")
@@ -323,27 +347,33 @@ int AffyEngine::ReadVCF(const char* dataFilename)
 				items = methods::Split(line, '\t');
 				name = items.at(SNPRSIndex);
 				
-				if (name.substr(0,1) != ".")
+				if (name.substr(0,1) != "." || noRS == true)
 				{
 					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth);
 					cm = methods::to_Double(items.at(cmPIndex));
 					chromosome = items.at(ChromoIndex);
 
 
-					SNP aSNP(cm, name, genotype, chromosome);//, cutOff);
+					SNP aSNP(cm, name, genotype, chromosome);
 					if (aSNP.getFailedData() == false)
 					{
 						AddtoArray(aSNP.getChromosome(), aSNP, count[aSNP.getChromosome()]);
-						count[aSNP.getChromosome()]++;							
-					}											
+						count[aSNP.getChromosome()]++;	
+						good++;
+					}
+					else 
+					{ 
+						if (aSNP.getChromosome() != 0)
+						{ bad++; }
+					}
 				}
 			}
 		}
 		input.close();
 		SortArrays();
-
+		std::cout << "Saved " << good << " SNP and rejected " << bad << " SNPs\n";
 	}
-	return 1;
+	return 0;
 }
 
 std::string AffyEngine::getGenotype(std::string item, int minimumReadDepth)
@@ -459,9 +489,11 @@ bool AffyEngine::searchBirdSeedFile(const char* filename)
 
 	input.close();
 	answer = true;
-	if (!(sError == ""))
+	if (! (sError == ""))
 	{
 		sError = "This file does not contain all the data needed please include the following data:\n" + sError;
+		std::cout << sError << "\n";
+		answer = false;
 	}
 
 	return answer;
@@ -545,8 +577,11 @@ bool AffyEngine::searchFile(const char* filename)
 	input.close();
 	answer = true;
 	if (! (sError == ""))
-	{sError = "This file does not contain all the data needed please include the following data:\n" + sError;}
-
+	{
+		sError = "This file does not contain all the data needed please include the following data:\n" + sError;
+		std::cout << sError << "\n";
+		answer = false;
+	}
 	return answer;
 
 }
@@ -620,7 +655,11 @@ bool AffyEngine::searchVCFFile(const char* filename)
 	input.close();
 	answer = true;
 	if (! (sError == ""))
-	{sError = "This file does not contain all the data needed please include the following data:\n" + sError;}
+	{
+		sError = "This file does not contain all the data needed please include the following data:\n" + sError;
+		std::cout << sError << "\n";
+		answer = false;
+	}
 
 	return answer;
 
@@ -875,37 +914,41 @@ void AffyEngine::SetSNPs(int Chromosome, std::vector<SNP> SNPs)
 	}
 }
 
-void AffyEngine::AnalyseDataAffy()
+int AffyEngine::AnalyseDataAffy()
 {
-
 	if (SetConstants() == -1)
-	{return;}
+	{return -1;}
 
 	for (int index = 0; index < iterationNumber; ++index)
 	{
 		if (HomozygousRun(false) == -1)
-		{return;}
-
+		{return -2;}
+		
 		if (CleanUp() == -1)
-		{return;}
+		{return -3;}
 	}
-
+	
 	if (HomozygousRun(true) == -1)
-	{return;}
+	{return -4;}
 
 	if (SetConstants() == -1)
-	{return;}
+	{return -5;}
 
+	return 0;
 }
 
 int AffyEngine::SetConstants()
 {
 	int answer = -1;
-	int Number = c1.size();
-	RunsCutOff = (int)(((RunsCutOffProportion * Number) / 70700.0f) + 0.5f);
-	ExclusionCutOff = (int)(((ExclusionCutOffProportion * Number) / 70700.0f) + 0.5f);
-	answer = 1;
-
+	try
+	{		
+		int Number = c1.size();
+		RunsCutOff = (int)(((RunsCutOffProportion * Number) / 70700.0f) + 0.5f);
+		ExclusionCutOff = (int)(((ExclusionCutOffProportion * Number) / 70700.0f) + 0.5f);
+		answer = 1;
+	}
+	catch (int)
+	{ }
 	return answer;
 
 }
@@ -994,12 +1037,17 @@ int AffyEngine::CleanUp()
 
 std::vector<std::string> AffyEngine::WriteNewDescription() 
 {
+	
 	std::vector<Region> Current = GetRegions();
 	std::string sb, sbInterval;
 	sb = "Chromosome\tStart\tEnd\tLength\n";
 	std::vector<std::string> answer;
-	
-	if (Current[0].End() != 1)
+	if (Current.size() == 0)
+		{
+			sb = "No regions";
+			sbInterval = "No regions";
+		}
+	else if (Current[0].End() != 1)
 		{
 		for (int index = 0; index < (int)Current.size(); index++) 
 			{
@@ -1009,8 +1057,8 @@ std::vector<std::string> AffyEngine::WriteNewDescription()
 		}
 	else
 		{
-		sb = "No regions";
-		sbInterval = "No regions";
+			sb = "No regions";
+			sbInterval = "No regions";
 		}
 
 	answer.push_back(sb);
@@ -1022,10 +1070,9 @@ std::vector<std::string> AffyEngine::WriteNewDescription()
 
 std::vector<Region> AffyEngine::GetRegions()
 {
-
 	std::vector<SNP> cN = GetSNPs(1);
 	int NumberOfSNPs = cN.size() - 1;
-
+	
 	double LastNo = -1;
 	double LastYes = -1;
 	double ThisChromosomeLength;
@@ -1038,55 +1085,59 @@ std::vector<Region> AffyEngine::GetRegions()
 	Region thisRegion(1, 1, "1");
 	std::vector<Region> Current(1, thisRegion);
 
-
+	std::cout << "SNP counts per chromosome\n";
 	for (int ThisChromosome = 1; ThisChromosome < 23; ++ThisChromosome)
 	{
 		cN = GetSNPs(ThisChromosome);
 		NumberOfSNPs = cN.size() - 1;
-		ThisChromosomeLength = cN[NumberOfSNPs].getPosition();
-		GenoSize += ThisChromosomeLength - cN[0].getPosition();
-		int endOfRun = 0;
-		here = 0;
-		while (here < NumberOfSNPs + 1)
+		std::cout << (NumberOfSNPs + 1) << "\ton " << ThisChromosome << "\n";
+		if (NumberOfSNPs > -1)
 		{
-			if (cN[here].getMyRuns() > ExclusionCutOff)
+			ThisChromosomeLength = cN[NumberOfSNPs].getPosition();
+			GenoSize += ThisChromosomeLength - cN[0].getPosition();
+			int endOfRun = 0;
+			here = 0;
+			while (here < NumberOfSNPs + 1)
 			{
-				ThisRegion = here + cN[here].getMyRuns() - 1;
-				if (ThisRegion > NumberOfSNPs) { ThisRegion = NumberOfSNPs; }
-				RunLength = (double)(cN[ThisRegion].getPosition() - (double)(cN[here].getPosition()));
-				HomoSize += RunLength;
-
-				for (int index = here; index < ThisRegion; index++)
+				if (cN[here].getMyRuns() > ExclusionCutOff)
 				{
-					if (cN[index + 1].getPosition() - cN[index].getPosition() > 5000000)
+					ThisRegion = here + cN[here].getMyRuns() - 1;
+					if (ThisRegion > NumberOfSNPs) { ThisRegion = NumberOfSNPs; }
+					RunLength = (double)(cN[ThisRegion].getPosition() - (double)(cN[here].getPosition()));
+					HomoSize += RunLength;
+
+					for (int index = here; index < ThisRegion; index++)
 					{
-						HomoSize -= cN[index + 1].getPosition() - cN[index].getPosition();
+						if (cN[index + 1].getPosition() - cN[index].getPosition() > 5000000)
+						{
+							HomoSize -= cN[index + 1].getPosition() - cN[index].getPosition();
+						}
 					}
+
+					endOfRun = here + cN[here].getMyRuns() - 1;
+					if (endOfRun > NumberOfSNPs) { endOfRun = NumberOfSNPs; }
+
+					thisRegion = Region((int)cN[here].getPosition(), (int)cN[endOfRun].getPosition(), methods::from_Int(ThisChromosome));
+					Current = AddToList(Current, thisRegion);
+
+					/*sb += methods::from_Int(ThisChromosome) + '\t' + methods::To_NiceString(cN[here].getPosition()) + '\t' + methods::To_NiceString(cN[endOfRun].getPosition()) + '\t' + methods::To_NiceString(cN[endOfRun].getPosition() - cN[here].getPosition()) + "\n";
+					sbInterval += "chr" + methods::from_Int(ThisChromosome) + ":" + methods::To_NiceString(cN[here].getPosition()) + "-" + methods::To_NiceString(cN[endOfRun].getPosition())  + "\n";
+					*/
+					here = here + cN[here].getMyRuns();
 				}
-
-				endOfRun = here + cN[here].getMyRuns() - 1;
-				if (endOfRun > NumberOfSNPs) { endOfRun = NumberOfSNPs; }
-
-				thisRegion = Region((int)cN[here].getPosition(), (int)cN[endOfRun].getPosition(), methods::from_Int(ThisChromosome));
-				Current = AddToList(Current, thisRegion);
-
-				/*sb += methods::from_Int(ThisChromosome) + '\t' + methods::To_NiceString(cN[here].getPosition()) + '\t' + methods::To_NiceString(cN[endOfRun].getPosition()) + '\t' + methods::To_NiceString(cN[endOfRun].getPosition() - cN[here].getPosition()) + "\n";
-				sbInterval += "chr" + methods::from_Int(ThisChromosome) + ":" + methods::To_NiceString(cN[here].getPosition()) + "-" + methods::To_NiceString(cN[endOfRun].getPosition())  + "\n";
-				*/here = here + cN[here].getMyRuns();
+				else
+				{
+					here += 1;
+				}
 			}
-			else
-			{
-				here += 1;
-			}
-		}
-
+		}	
 	}
 	
 	vector<Region> sized;
 	for (int index = 0; index < Current.size(); index++)
 	{
 		if (Current[index].End() - Current[index].Start() >= 1000000)
-		{ sized.push_back(Current[index]); }
+		{ sized.push_back(Current[index]); }	
 	}
 
 	return sized;

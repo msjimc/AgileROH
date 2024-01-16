@@ -5,6 +5,7 @@
 #include "methods.h"
 #include "Region.h"
 #include "parameters.h"
+#include <cstdio>
 
 #define FLOAT_TOL 0.000001
 
@@ -62,9 +63,9 @@ private:
 
 public:
     AffyEngine(void);
-    AffyEngine(const char* dataFilename, parameters p);
+    AffyEngine(const char* dataFilename, parameters p, bool noRS);
     ~AffyEngine(void);
-	int ReadVCF(const char* dataFilename);
+	int ReadVCF(const char* dataFilename, bool noRS);
 	std::string getGenotype(std::string item, int minimumReadDepth);
 	int ReadAffyXls(const char* dataFilename);
 	int ReadBirdSeed(const char* dataFilename);
@@ -75,7 +76,7 @@ public:
     void AddtoArray(int Chromo, SNP cm, int index);
     std::vector<SNP> GetSNPs(int Chromosome);
     void SetSNPs(int Chromosome, std::vector<SNP> SNPs);
-    void AnalyseDataAffy();
+    int AnalyseDataAffy();
     int SetConstants();
     int HomozygousRun(bool Clean);
     int CleanUp();
@@ -83,6 +84,7 @@ public:
     std::vector<std::string> WriteNewDescription(); 
 	std::vector<Region> GetRegions();
     std::vector<Region> AddToList(std::vector<Region> Current, Region Next);	
+	int status;
 
 	//geneticvaluesAndFunctions
 	void setValues(parameters p);

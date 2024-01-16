@@ -14,9 +14,9 @@
 int main(int argc, char* argv[])
 {
 
-	if (argc != 4)
+	if (argc < 4 || argc > 5)
 	{
-		std::cerr << "Usage: 'input file' 'output file' 'export file option':\nExport file options:\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\n";
+		std::cerr << "Usage: 'input file' 'output file' 'export file option' 'optional use SNP without RS ID (-Y or -N)':\nExport file options:\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\nWhen processing VCF files";
 		return EXIT_FAILURE;
 	}
 
@@ -40,6 +40,15 @@ int main(int argc, char* argv[])
 	input.exceptions(input.badbit);
 	output.exceptions(output.badbit);
 
+	bool noRS = false;
+	if (argc == 5)
+	{ 
+		string useSNP(argv[4]);		
+		
+		if (useSNP == "-Y" || useSNP == "-y")
+		{ noRS = true; }		
+	}	
+
 	try
 	{
 		parameters firstP(true);
@@ -53,12 +62,23 @@ int main(int argc, char* argv[])
 		firstP.ExclusionCutOffProportion = 575;
 
 		std::cout << "Reading data file " << argv[1] << '\n';
-		AffyEngine worker(argv[1], firstP);
-
+		AffyEngine worker(argv[1], firstP, noRS);
+		if (worker.status != 0)
+		{ 
+			return -1;
+		}
+		
 		std::cout << "Processing data\n";
-		worker.AnalyseDataAffy();
-
+		int errorStatus = worker.AnalyseDataAffy();
+		if (errorStatus == -1)
+		{ 
+			std::cout << "Could not process file (" << errorStatus << "\n";
+			return -1;
+		}
+		else{ std::cout << "Created homozygous run data\n";}
+		
 		std::vector<std::string> answer = worker.WriteNewDescription();
+		
 		std::string option(argv[3]);
 		if (option == "-t" || option == "-T")
 		{
