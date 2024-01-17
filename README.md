@@ -17,7 +17,7 @@ The source code can be compiled on both Linux and Windows computers as described
 Both programs have been prebuild for Linux and Windows and placed in the Program folder. Select the appropriate OS version and download the programs ([Linux](Program/Linux) or [Windows](Program/LiWindowsnux)). Due to the security policies of some organisations, downloading programs on a Windows computer may not be straight forward, however this [guide](Program/README.md) may help.  
 
 ## Running the programs
-These programs are console applications and so do not have a user interface and run within a terminal environment. On Linux this will typically be in a bash terminal while on windows it will be a "Command Prompt" or "PowerShell" terminal.  
+These programs are console applications and so do not have a user interface and run within a terminal environment. On Linux this will typically be in a bash terminal while on windows it will be a "Command Prompt" or "PowerShell" terminal. If the analysis is preformed on a remote server the application would typically be run from the inbuilt bash terminal on Linux or Mac and from a third party terminal such as Putty on windows 
 
 The examples below use the Linux file structure were /data/in.vcf referes to a file in the "data" folder, the equivalent on Windows would be "C:\data\in.vcf".
 
