@@ -109,4 +109,4 @@ Figure 7 shows the program feedback if input file does not contain the expected 
 |-|
 |![Figure 8](images/figure8.jpg) |
 
-Figure 8: Feedback if input file format is totally wrong and the program crashes reading it. In this case a results text file was given a vcf file extension and then entered as a vcf data file. The program as attempted to read data that does not exist and crashed. This will create a cryptic error message  
+Figure 8: Feedback if input file format is totally wrong and the program crashes reading it. In this case a results text file was given a vcf file extension and then entered as a vcf data file. The program as attempted to read data that does not exist and crashed. This will create a cryptic error message, if the problem persists after checking the files format, you may need to contact me. 
