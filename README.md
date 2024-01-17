@@ -45,9 +45,13 @@ As the programs run, they will report their current status to the in the termina
 
 ### A successful analysis:
 
-|Figure 1: ```AgileROHFilterer```|Figure 2: ```AgileROHFinder```|
-|-|-|
-|![Figure 1](images/figure1.jpg) |![Figure 2](images/figure2.jpg)|
+Figure 1: ```AgileROHFilterer```
+
+![Figure 1](images/figure1.jpg) 
+
+Figure 2: ```AgileROHFinder```
+
+![Figure 2](images/figure2.jpg)
 
 Figure 1
 
