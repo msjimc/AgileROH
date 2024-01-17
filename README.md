@@ -63,13 +63,13 @@ Next the program declares that it is analysing the SNP data to find autozygous r
 The next 23 lines form a table of the number of SNPs analysed on each autosomal chromosome. Typically, the number of variants depends on the length of the chromosome and the number of genes it contains that are in the pulldown reagent.
 Finally, ```AgileROHFilterer``` will state "*Filtering the VCF file*" indicating it is creating the results files. Since ```AgileROHFinder``` does not filter the variants, it just states "*Completed task*".
 
-### Incorrectly named input file
+### Wrong input file name
 
 |Figure 3: Wrong input file|
 |-|
 |![Figure 3](images/figure3.jpg) |
 
-Figure 3 shows the program feedback if the input file is incorrectly entered. A similar message will be displayed if the program can not open it because it is open for editing in another program.
+Figure 3: Feedback if the input file is incorrectly entered. A similar message will be displayed if the program can not open the file because it is open for editing in another program.
 
 ### Trying to export data to a folder that doesn't exist
 
@@ -77,7 +77,7 @@ Figure 3 shows the program feedback if the input file is incorrectly entered. A 
 |-|
 |![Figure 4](images/figure4.jpg) |
 
-Figure 4 shows the program feedback if the folder the export file is to be saved too does not exist. The programs can create results files, but will not create folders/directories.
+Figure 4: Feedback if the folder the export file is to be saved too does not exist. The programs can create results files, but will not create folders/directories.
 
 ### The input data file's extension is not recognised
 
@@ -85,7 +85,7 @@ Figure 4 shows the program feedback if the folder the export file is to be saved
 |-|
 |![Figure 5](images/figure5.jpg) |
 
-Figure 5 shows the program feedback if input file does not recognise the file extension. While Linux itself does not use file extensions, these programs do use them to decide what type of data file is been used. If the file extension is not '.vcf', '.txt' or '.xls' the program will not process them. 
+Figure 5: Feedback if the input file does not recognise the file extension. While Linux itself does not use file extensions, these programs do use them to decide what type of data file is been used. If the file extension is not '.vcf', '.txt' or '.xls' the program will not process them. 
 
 ### The input data file's extension does not match the data type
 
@@ -93,12 +93,20 @@ Figure 5 shows the program feedback if input file does not recognise the file ex
 |-|
 |![Figure 6](images/figure7.jpg) |
 
-Figure 6 shows the program feedback if input file's extension does not match it's format. In this case the file is a vcf file, but its extension has been changed to txt. Consequently, the program has processed it as a microarray file and found that it does not contain the expected data fields/columns.
+Figure 6: Feedback if the input file's extension does not match it's format. In this case the file is a vcf file, but its extension has been changed to txt. Consequently, the program tries to processed it as a microarray file and found that it does not contain the expected data fields/columns.
 
 ### The input data file does not contain all the required data fields/columns
 
 |Figure 7: Missing data fields
 |-|
-|![Figure 76](images/figure7.jpg) |
+|![Figure 7](images/figure7.jpg) |
 
 Figure 7 shows the program feedback if input file does not contain the expected data fields/columns. In this case the vcf file contains the total read depth value for each variant, but not the read depths for each allele. 
+
+### The input data file's format is completely wrong
+
+|Figure 8: Wrong totally file format
+|-|
+|![Figure 8](images/figure8.jpg) |
+
+Figure 8: Feedback if input file format is totally wrong and the program crashes reading it. In this case a results text file was given a vcf file extension and then entered as a vcf data file. The program as attempted to read data that does not exist and crashed. This will create a cryptic error message  
