@@ -1,5 +1,5 @@
 #!/bin/bash
-# bash pathto AgileROHFilterer.exe path_To_Folder_Of_VCF_Files either_-t|-b|-a
+# bash pathto AgileROHFilterer.exe path_To_Folder_Of_VCF_Files integer either_-t|-b|-a
 #i.e. /home/msjimc/AgileROHFilterer.exe /data/VCFfiles/ 500000 -t
 
 program=$1
