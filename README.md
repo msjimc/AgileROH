@@ -21,6 +21,9 @@ These programs are console applications and so do not have a user interface. The
 
 The examples below use the Linux file structure were /data/in.vcf refers to a file in the "data" folder, the equivalent on Windows would be "C:\data\in.vcf".
 
+### Helpful scripts
+The [Program > scripts](Program\scripts\README.md) page contains a python and bash scripts that may be helpful.
+
 #### Commands
 Both programs require very similar commands, the structure of the commands to run ```AgileROHFinder``` and ```AgileROHFilterer``` are shown below and described in greater detail in the table.
 
