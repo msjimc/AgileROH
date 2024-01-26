@@ -15,9 +15,9 @@
 int main(int argc, char* argv[])
 {
 
-    if (argc < 6 || argc > 7)
+    if (argc < 6 || argc > 8)
     {   
-        std::cerr << "Usage: 'input VCF file' 'output VCF file' 'output regions text file' 'n' 'export file format option' 'optional use SNP without RS ID (-Y or -N)'\nWhere 'n' retains variants with in n bp of a region (n = 0 to 1000000)\nExport regions file options (select 1):\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\n";
+        std::cerr << "Usage: 'input VCF file' 'output VCF file' 'output regions text file' 'n' 'export file format option' 'optional use SNP without RS ID (-Y)' 'optional use genotypes in VCF file (-V)\nWhere 'n' retains variants with in n bp of a region (n = 0 to 1000000)\nExport regions file options (select 1):\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\n";
         return EXIT_FAILURE;
     }
 
@@ -48,13 +48,28 @@ int main(int argc, char* argv[])
     outputVCF.exceptions(outputVCF.badbit);
 
 	bool noRS = false;
+	bool genotype = false;
 	if (argc == 7)
 	{ 
-		string useSNP(argv[6]);		
+		string optional(argv[6]);		
 		
-		if (useSNP == "-Y" || useSNP == "-y")
+		if (optional == "-Y" || optional == "-y")
 		{ noRS = true; }		
+		else if (optional == "-V" || optional == "-v")
+		{ genotype = true; }		
 	}	
+	
+	if (argc == 8)
+	{ 
+		string optional(argv[7]);		
+		
+		if (optional == "-Y" || optional == "-y")
+		{ noRS = true; }		
+		else if (optional == "-V" || optional == "-v")
+		{ genotype = true; }		
+	}	
+	
+	
 	
     try
     {
@@ -70,7 +85,7 @@ int main(int argc, char* argv[])
 
         std::cout << "Reading data file " << argv[1] << '\n';
 		
-        AffyEngine worker(argv[1], firstP, noRS);
+        AffyEngine worker(argv[1], firstP, noRS, genotype);
        	if (worker.status != 0)
 		{ 
 			return -1;

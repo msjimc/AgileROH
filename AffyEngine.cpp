@@ -40,30 +40,45 @@ void AffyEngine::SortArrays()
 AffyEngine::AffyEngine(void)
 {}
 
-AffyEngine::AffyEngine(const char* dataFilename, parameters p, bool noRS)
-{
+AffyEngine::AffyEngine(const char* dataFilename, parameters p, bool noRS, bool genotype)
+ {
 	setValues(p);
 
 	theFilename = dataFilename;
 	int length = (int)std::strlen(theFilename);
 	std::string s(theFilename); 
 	std::string extension = s.substr(length - 3, 3);
-	if (extension == "txt" || extension == "TXT")
+
+	std::string lowercaseExtension ("");
+	if (extension[0] <= 'Z' && extension[0] >= 'A')
+	{ lowercaseExtension = extension[0] - ('Z' - 'z'); }
+	else { lowercaseExtension = extension[0]; }
+
+	if (extension[1] <= 'Z' && extension[1] >= 'A')
+	{ lowercaseExtension += extension[1] - ('Z' - 'z'); }
+	else { lowercaseExtension += extension[1]; }
+
+	if (extension[2] <= 'Z' && extension[2] >= 'A')
+	{ lowercaseExtension += extension[2] - ('Z' - 'z'); }
+	else { lowercaseExtension += extension[2]; }
+
+
+	if (lowercaseExtension == "txt")
 	{ 		
 		p.iterationNumber = 5;
 		p.RunsCutOffProportion = 100;
 		p.ExclusionCutOffProportion = 700;
 		status = AffyEngine::ReadBirdSeed(theFilename);
 	}
-	else if (extension == "xls" || extension == "XLS")
+	else if (lowercaseExtension == "xls")
 	{ 
 		p.iterationNumber = 5;
 		p.RunsCutOffProportion = 100;
 		p.ExclusionCutOffProportion = 700;
 		status = AffyEngine::ReadAffyXls(theFilename); 		
 	}
-	else if (extension == "vcf" || extension == "VCF")
-	{ status = AffyEngine::ReadVCF(theFilename, noRS); }
+	else if (lowercaseExtension == "vcf")
+	{ status = AffyEngine::ReadVCF(theFilename, noRS, genotype); }
 	else
 	{ 
 		status = -1;
@@ -126,7 +141,7 @@ int AffyEngine::ReadBirdSeed(const char* dataFilename)
 				counter++;
 			}
 
-			SNP aSNP(cm, name, genotype, chromosome);// , cutOff);
+			SNP aSNP(cm, name, genotype, chromosome);
 			if (aSNP.getFailedData() == false)
 			{
 				count[aSNP.getChromosome()]++;
@@ -284,7 +299,7 @@ int AffyEngine::ReadAffyXls(const char* dataFilename)
 	return 0;
 }
 
-int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
+int AffyEngine::ReadVCF(const char* dataFilename, bool noRS, bool UseGenotype)
 {		
 	std::ifstream input(dataFilename);
 	if (! input)
@@ -295,7 +310,7 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
 	else
 	{
 
-		if (AffyEngine::searchVCFFile(dataFilename) == false)
+		if (AffyEngine::searchVCFFile(dataFilename, UseGenotype) == false)
 		{return -1;}
 
 		double cm = 0;
@@ -308,11 +323,16 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
 		std::string line, item, name, chromosome, genotype;
 		int counter = 0;
 		if (noRS == true)
-		{ std:cout << "Including SNP without RS ids\n"; }
+		{ std::cout << "Including SNPs without RS ids\n"; }
 		else
-		{ std::cout << "Ignoring SNPs without RS IDs\n";}
-	
-		while (std::getline(input, line)) 
+		{ std::cout << "Ignoring SNPs without RS IDs\n"; }
+
+		if (UseGenotype == true)
+		{ std::cout << "Using genotypes in VCF file (No validated in paper)\n"; }
+		else
+		{ std::cout << "Calculating genotypes\n"; }
+
+		while (std::getline(input, line))
 		{
 			if(line.substr(0, 1) != "#")
 			{
@@ -322,7 +342,7 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
 
 				if (name.substr(0,1) != "." || noRS == true)
 				{					
-					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth);
+					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth, UseGenotype);
 					cm = methods::to_Double(items.at(cmPIndex));
 					chromosome = items.at(ChromoIndex);
 
@@ -349,7 +369,7 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
 				
 				if (name.substr(0,1) != "." || noRS == true)
 				{
-					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth);
+					genotype = AffyEngine::getGenotype(items.at(GenotypeIndex), minimumReadDepth, UseGenotype);
 					cm = methods::to_Double(items.at(cmPIndex));
 					chromosome = items.at(ChromoIndex);
 
@@ -371,37 +391,52 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS)
 		}
 		input.close();
 		SortArrays();
-		std::cout << "Saved " << good << " SNP and rejected " << bad << " SNPs\n";
+		std::cout << "Saved " << good << " SNPs and rejected " << bad << " SNPs\n";
 	}
 	return 0;
 }
 
-std::string AffyEngine::getGenotype(std::string item, int minimumReadDepth)
+std::string AffyEngine::getGenotype(std::string item, int minimumReadDepth, bool genotype)
 {
 	std::vector<std::string> subitems = methods::Split(item, ':');
 	std::vector<std::string> values = methods::Split(subitems.at(AD), ',');
 	int reference = methods::to_Integer(values.at(0));
 	int	variant = methods::to_Integer(values.at(1));
-	int readDepth = methods::to_Integer(subitems.at(DP)); 
-	float ratio = (float)(readDepth - variant) / (float)readDepth;
+	
 
 	std::string answer = "noCall";
-
-	if (values.size() > 2)
-	{answer = "triallelic";}
-	else if (readDepth >= minimumReadDepth)
+	if (genotype == false)
 	{
-		if (readDepth == minimumReadDepth)
-		{answer = "noCall";}
-		else if (ratio > AA)
-		{answer = "AA";}
-		else if (ratio < BB)
-		{ answer = "BB";}
-		else if (ratio > lowerAB && ratio < higherAB)
-		{answer = "AB";}
+		int readDepth = methods::to_Integer(subitems.at(DP));
+		float ratio = (float)(readDepth - variant) / (float)readDepth;
+
+		if (values.size() > 2)
+		{ answer = "triallelic"; }
+		else if (readDepth >= minimumReadDepth)
+		{
+			if (readDepth == minimumReadDepth)
+			{ answer = "noCall"; }
+			else if (ratio > AA)
+			{ answer = "AA"; }
+			else if (ratio < BB)
+			{ answer = "BB"; }
+			else if (ratio > lowerAB && ratio < higherAB)
+			{ answer = "AB"; }
+		}
+		else
+		{ answer = "lower"; }
 	}
 	else
-	{answer = "lower";}
+	{
+		string g = subitems.at(GT);
+		if (g == "0/0")
+		{ answer = "AA"; }
+		else if (g == "0/1" || g == "1/0")
+		{ answer = "AB"; }
+		else if (g == "1/1")
+		{ answer = "BB"; }
+		else{ answer == "noCall"; }
+	}
 
 	return answer;
 
@@ -586,7 +621,7 @@ bool AffyEngine::searchFile(const char* filename)
 
 }
 
-bool AffyEngine::searchVCFFile(const char* filename)
+bool AffyEngine::searchVCFFile(const char* filename, bool genotype)
 {
 	bool answer = false;
 	std::string strData = "";
@@ -600,6 +635,7 @@ bool AffyEngine::searchVCFFile(const char* filename)
 	cmPIndex = 1;
 	AD=-1;
 	DP =-1;
+	GT = -1;
 	std::ifstream input(filename);
 	if (! input)
 	{
@@ -611,7 +647,7 @@ bool AffyEngine::searchVCFFile(const char* filename)
 		bool done = false;
 		std::string line;
 		int place =0;
-		while (done == false)
+		while (done == false) 
 		{
 			std::getline(input, line);
 			if(line.substr(0, 1) != "#")
@@ -624,8 +660,10 @@ bool AffyEngine::searchVCFFile(const char* filename)
 
 					if (item == "AD")
 					{AD = place;}
-					else if (item == "DP")
-					{DP = place;}
+					else if (item == "DP") 
+					{ DP = place; }
+					else if (item == "GT")
+					{ GT = place; }
 
 					place++;
 				}
@@ -636,18 +674,28 @@ bool AffyEngine::searchVCFFile(const char* filename)
 
 	std::string sError = "";
 
-	if (AD == -1){
+	if (AD == -1 && genotype == false)
+	{
 		if (sError == "")
 			sError = "Allele depth (AD)";
 		else{
 			sError += "\nAllele depth (AD)";
 		}
 	}
-	if (DP == -1){
+	if (DP == -1 && genotype == false)
+	{
 		if (sError == "")
 			sError = "Total read depth (DP)";
 		else{
 			sError += "\nTotal read depth (DP)";
+		}
+	}
+	if (GT == -1 && genotype == true)
+	{
+		if (sError == "")
+			sError = "Genotype field (GT)";
+		else {
+			sError += "\nGenotype field (GT)";
 		}
 	}
 

@@ -44,6 +44,7 @@ private:
     int ExclusionCutOff;
 	int AD;
 	int DP;
+    int GT;
 
 	void SortArrays();
 
@@ -63,15 +64,15 @@ private:
 
 public:
     AffyEngine(void);
-    AffyEngine(const char* dataFilename, parameters p, bool noRS);
+    AffyEngine(const char* dataFilename, parameters p, bool noRS, bool genotype);
     ~AffyEngine(void);
-	int ReadVCF(const char* dataFilename, bool noRS);
-	std::string getGenotype(std::string item, int minimumReadDepth);
+	int ReadVCF(const char* dataFilename, bool noRS, bool genotype);
+	std::string getGenotype(std::string item, int minimumReadDepth, bool genotype);
 	int ReadAffyXls(const char* dataFilename);
 	int ReadBirdSeed(const char* dataFilename);
 	bool searchFile(const char* Filename);
 	bool searchBirdSeedFile(const char* Filename);
-	bool searchVCFFile(const char* Filename);
+	bool searchVCFFile(const char* Filename, bool genotype);
 	void setVectorSizes(std::vector<int> count);
     void AddtoArray(int Chromo, SNP cm, int index);
     std::vector<SNP> GetSNPs(int Chromosome);
