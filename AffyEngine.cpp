@@ -328,7 +328,7 @@ int AffyEngine::ReadVCF(const char* dataFilename, bool noRS, bool UseGenotype)
 		{ std::cout << "Ignoring SNPs without RS IDs\n"; }
 
 		if (UseGenotype == true)
-		{ std::cout << "Using genotypes in VCF file (No validated in paper)\n"; }
+		{ std::cout << "Using genotypes in VCF file (Not validated in paper)\n"; }
 		else
 		{ std::cout << "Calculating genotypes\n"; }
 
