@@ -14,7 +14,7 @@ The source code can be compiled on both Linux and Windows computers as described
 
 ## Prebuild programs
 
-Both programs have been prebuilt for Linux and Windows and placed in the Program folder. Select the appropriate OS version and download the programs ([Linux](Program/Linux) or [Windows](Program/LiWindowsnux)). Due to the security policies of some organisations, downloading programs on a Windows computer may not be straight forward, however this [guide](Program/README.md) may help.  
+Both programs have been prebuilt for Linux and Windows and placed in the Program folder. Select the appropriate OS version and download the programs ([Linux](Program/Linux) or [Windows](Program/Windows)). Due to the security policies of some organisations, downloading programs on a Windows computer may not be straight forward, however this [guide](Program/README.md) may help.  
 
 ## Running the programs
 These programs are console applications and so do not have a user interface. They run within a terminal environment. On Linux this will typically be in a bash terminal while on windows it will be a "Command Prompt" or "PowerShell" terminal. If the analysis is preformed on a remote server the application would typically be run from the inbuilt bash terminal on Linux or Mac or on windows via a third party terminal such as Putty. In both cases they connected to the remote server via an SSH connection.
@@ -47,7 +47,8 @@ Both programs require very similar commands, the structure of the commands to ru
 |/data/out.txt|The name with location of the file to save the list of autozygous regions too|While it will create this file, it will not create any directories, so the path to the location most exist before the program is run.|
 |Any whole positive number|The reported regions are be extended by this number of bases when ```AgileROHFilterer``` filters the variants by position, such that variants just outside a region are also retained| <font color="red">This option is only present in ```AgileROHFilterer```</font>|
 |Export format options <br />__-t__, __-b__ or __-a__|Sets the format of the data results file|See Tables 2 to 4 for examples|
-|Process all variants: <br />__-Y__ or __-N__|By default only variants with an RS ID are processed, if __-Y__ is set then all SNPs (with one alternative allele) will be used|Optional|  
+|Process all variants: <br />__-Y__ |By default only variants with an RS ID are processed, if __-Y__ is set then all SNPs (with one alternative allele) will be used|Optional: only affects analysis of VCF data| 
+|Use genotypes in VCF file: __-V__|By default a variants genotype is calculated by the program, if __-V__ is set the genotype in the VCF file is used (The file most have the 'GT' field)|Optional: only affects analysis of VCF data|   
  
  Table 2
 
@@ -73,21 +74,22 @@ As the programs run, the current status will be shown in the terminal window.
 
 ### A successful analysis:
 
-Figure 1: ```AgileROHFilterer```
+Figure 1: ```AgileROHFiinder```
 
 ![Figure 1](images/figure1.jpg) 
 
-Figure 2: ```AgileROHFinder```
+Figure 2: ```AgileROHFilterer```
 
 ![Figure 2](images/figure2.jpg)
 
 Figure 1
 
-Figures 1 and 2 show a typical status report of the analysis of a exome vcf file by ```AgileROHFilterer``` and ```AgileROHFinder``` respectively.  
+Figures 1 and 2 show a typical status report of the analysis of a exome vcf file by ```AgileROHFinder``` and ```AgileROHFilterer``` respectively where only variants with an RS id were used and their genotypes were calculated by the programs.   
 
 #### Output description:
 * Initially, the program states which file is being process.  
 * Next it states whether it will process variants without an RS ID. "*Including SNP without RS ids*" indicates it will process all variants,  while *"Ignoring SNP without RS IDs*" indicates unnamed variants will be excluded.  
+* The program that declares whether it is calculating the genotypes from the allele read depths (Calculating genotypes)or using those in the VCF file (Using genotypes in VCF file (No validated in paper)): Using genotypes in the VCF file was not validated in the linked paper.
 * Once the file has been read, the program displays the number of SNPs saved and the number rejected. Only single base SNPs on the autosomal chromosomes are counted with the main reasons for a variant being rejected are low total read count or skewed allele read ratios. <br />(Issues with the file format may also cause the SNPs to be rejected, in this case an excessive number or all the SNPs may be rejected.)   
 * Next the program states that it is analysing the SNP data to find autozygous regions ("*Processing data and finding autozygous regions*") followed by "*Created homozygous run data*" when the analysis is completed.  
 * The next 23 lines form a table of the number of SNPs analysed on each autosomal chromosome. Typically, the number of variants depends on the length of the chromosome and for exome data the number of genes on the chromosome.
@@ -144,4 +146,13 @@ Figure 8: Feedback if the input file format is totally wrong and the program cra
 
 ### Note
 
-TRhere are many ways in which the input data or command line arguments lead the analysis to fail. While the commonest reasons have been listed above its possible that some combinations of input data format and command option will result in unexpected behaviour. In these case always check that the file format matches the expected format as listed 0n the [data format page](DataFormat.md).
+There are many ways in which the input data or command line arguments lead the analysis to fail. While the commonest reasons have been listed above its possible that some combinations of input data format and command options will result in unexpected behaviour. In these cases always check that the file format matches the expected format as listed on the [data format page](DataFormat.md).
+
+## Identifying regions in VCF files without read depth data
+While many VCF files include read depth data for each variant, some VCF files do not. To allow the processing of this data, it is possible to instruct the programs to ignore read depth data and use the genotypes in the VCF file. In these cases the VCF file must contain the '__GT__' field and have have the genotypes declared as 0/0, 0/1, 1/0 or 1/1. Figure 9 shows the feedback of the analysis by ```AgileROHFinder``` with the optional __-V__ used to set this behaviour.
+
+|Figure 9: Use of genotypes in VCF file
+|-|
+|![Figure 9](images/figure9.jpg) |
+
+<font color="red">The results from this type of analysis was not investigated in the paper and so it is not supported. The quality of the results is highly likely to be dependant on the variant calling software and parameters used in its operation.</font>  
