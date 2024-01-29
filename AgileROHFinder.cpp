@@ -10,13 +10,14 @@
 #include "AffyEngine.h"
 #include "Region.h"
 #include "parameters.h"
+#include "methods.h"
 
 int main(int argc, char* argv[])
 {
 
-	if (argc < 4 || argc > 6)
+	if (argc < 4 || argc > 7)
 	{
-		std::cerr << "Usage: 'input file' 'output file' 'export file option' 'optional use SNP without RS ID (-Y)' 'optional use genotypes in VCF file (-V)'\nExport file options:\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\nWhen processing VCF files";
+		std::cerr << "Usage: 'input file' 'output file' 'export file option' 'optional use SNP without RS ID (-Y or -N)' 'optional use genotypes in VCF file (-V or -C)' 'optional  'Patient index in VCF file' \nExport file options:\n-t Tabular data\n-b Genome browser strings\n-a Both outputs\nWhen processing VCF files";
 		return EXIT_FAILURE;
 	}
 
@@ -42,19 +43,10 @@ int main(int argc, char* argv[])
 
 	bool noRS = false;
 	bool genotype = false;
-	if (argc == 5 || argc == 6)
+	int index = 9;
+	for (int place = 4; place < argc; place++)
 	{
-		string option4(argv[4]);
-
-		if (option4 == "-Y" || option4 == "-y")
-		{ noRS = true; }
-		else if (option4 == "-V" || option4 == "-v")
-		{ genotype = true; }
-	}
-	if (argc == 6)
-	{
-		string option4(argv[5]);
-
+		string option4(argv[place]);
 		if (option4 == "-Y" || option4 == "-y")
 		{
 			noRS = true;
@@ -63,7 +55,20 @@ int main(int argc, char* argv[])
 		{
 			genotype = true;
 		}
+		else
+		{
+			try
+			{
+				int person = methods::to_Integer(option4);
+				if (person > 0)
+				{ index = 8 + person; }
+			}
+			catch (char)
+			{
+			}
+		}
 	}
+
 
 	try
 	{
@@ -77,8 +82,8 @@ int main(int argc, char* argv[])
 		firstP.RunsCutOffProportion = 386;
 		firstP.ExclusionCutOffProportion = 575;
 
-		std::cout << "Reading data file " << argv[1] << '\n';
-		AffyEngine worker(argv[1], firstP, noRS, genotype);
+		std::cout << "Reading data file sample " << (index -8) << " in " <<  argv[1] << '\n';
+		AffyEngine worker(argv[1], firstP, noRS, genotype, index);
 		if (worker.status != 0)
 		{
 			return -1;

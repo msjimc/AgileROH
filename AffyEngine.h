@@ -42,38 +42,38 @@ private:
     int cmPIndex;
     int RunsCutOff;
     int ExclusionCutOff;
-	int AD;
-	int DP;
+    int AD;
+    int DP;
     int GT;
 
-	void SortArrays();
+    void SortArrays();
 
-	//geneticvaluesAndFunctions
-	float Fraction;
-	float AA; //0.8
-	float BB; //0.2
-	float lowerAB; //0.35
-	float higherAB; //0.65
-	int readDepth; //15
-	int iterationNumber; //5
-	float RunsCutOffProportion; //100
-	float ExclusionCutOffProportion; //600
-	parameters p;
+    //geneticvaluesAndFunctions
+    float Fraction;
+    float AA; //0.8
+    float BB; //0.2
+    float lowerAB; //0.35
+    float higherAB; //0.65
+    int readDepth; //15
+    int iterationNumber; //5
+    float RunsCutOffProportion; //100
+    float ExclusionCutOffProportion; //600
+    parameters p;
 
-	void setAB(float value) { lowerAB = 0.5f - value; higherAB = 0.5f + value; }
+    void setAB(float value) { lowerAB = 0.5f - value; higherAB = 0.5f + value; }
 
 public:
     AffyEngine(void);
-    AffyEngine(const char* dataFilename, parameters p, bool noRS, bool genotype);
+    AffyEngine(const char* dataFilename, parameters p, bool noRS, bool genotype, int index);
     ~AffyEngine(void);
-	int ReadVCF(const char* dataFilename, bool noRS, bool genotype);
-	std::string getGenotype(std::string item, int minimumReadDepth, bool genotype);
-	int ReadAffyXls(const char* dataFilename);
-	int ReadBirdSeed(const char* dataFilename);
-	bool searchFile(const char* Filename);
-	bool searchBirdSeedFile(const char* Filename);
-	bool searchVCFFile(const char* Filename, bool genotype);
-	void setVectorSizes(std::vector<int> count);
+    int ReadVCF(const char* dataFilename, bool noRS, bool genotype, int index);
+    std::string getGenotype(std::string item, int minimumReadDepth, bool genotype);
+    int ReadAffyXls(const char* dataFilename);
+    int ReadBirdSeed(const char* dataFilename);
+    bool searchFile(const char* Filename);
+    bool searchBirdSeedFile(const char* Filename);
+    bool searchVCFFile(const char* Filename, bool genotype, int index);
+    void setVectorSizes(std::vector<int> count);
     void AddtoArray(int Chromo, SNP cm, int index);
     std::vector<SNP> GetSNPs(int Chromosome);
     void SetSNPs(int Chromosome, std::vector<SNP> SNPs);
@@ -82,12 +82,12 @@ public:
     int HomozygousRun(bool Clean);
     int CleanUp();
 
-    std::vector<std::string> WriteNewDescription(); 
-	std::vector<Region> GetRegions();
-    std::vector<Region> AddToList(std::vector<Region> Current, Region Next);	
-	int status;
+    std::vector<std::string> WriteNewDescription();
+    std::vector<Region> GetRegions();
+    std::vector<Region> AddToList(std::vector<Region> Current, Region Next);
+    int status;
 
-	//geneticvaluesAndFunctions
-	void setValues(parameters p);
-	parameters getParameters() { return p; }
+    //geneticvaluesAndFunctions
+    void setValues(parameters p);
+    parameters getParameters() { return p; }
 };
