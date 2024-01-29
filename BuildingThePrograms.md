@@ -9,7 +9,7 @@ or
 ## Compiling on a Linux computer
 
 ### Linux - g++
-Place all the source code files in an empty folder and navigate to the in a Bash shell terminal and issue one or bother of the commands below:
+Place all the source code files in an empty folder and navigate to it in a Bash shell terminal and issue one or bother of the commands below:
 
 ```AgileROHFinder```
  > g++ -g AffyEngine.cpp AgileROHFinder.cpp GetRegions.cpp methods.cpp parameters.cpp Region.cpp SNP.cpp -o AgileROHFinder.exe 2> AgileROHFinder_error.txt
@@ -17,16 +17,18 @@ Place all the source code files in an empty folder and navigate to the in a Bash
 ```AgileROHFilterer```
 > g++ -g AffyEngine.cpp CompareRegionList.cpp AgileROHFilter.cpp GetRegions.cpp methods.cpp parameters.cpp Region.cpp SNP.cpp VCFFilter.cpp -o AgileROHFilter.exe 2> AgileROHFilter_error.txt
 
-This should build the selected application with any errors or warnings stored in the error file.
+This should build the selected application with any errors stored in the error file. To see all the messages replace the '2>' with '>'.
 
 ### Windows - Visual Studio 
 Create an empty C++ windows console application and select the required source code (*.cpp) and header (*.h) files. 
 
 ```AgileROHFinder```: 
 
-AffyEngine.cpp, AgileROHFinder.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp, and AffyEngine.h, GetRegions.h, methods.cpp, parameters.h, Region.h, SNP.h, dirent.h.
+___*.cpp files:___ AffyEngine.cpp, AgileROHFinder.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp   
+___*.h files:___ AffyEngine.h, GetRegions.h, methods.cpp, parameters.h, Region.h, SNP.h.
 
 ```AgileROHFilterer```:  
- AffyEngine.cpp, CompareRegionList.cpp, AgileROHFilter.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp, VCFFilter.cpp and AffyEngine.h, CompareRegionList.h, GetRegions.h, methods.h, parameters.h, Region.h, SNP.h, VCFFilter.h, dirent.h.
+ ___*.cpp files:___ AffyEngine.cpp, CompareRegionList.cpp, AgileROHFilter.cpp, GetRegions.cpp, methods.cpp, parameters.cpp, Region.cpp, SNP.cpp, VCFFilter.cpp  
+ ___*.h files:___ AffyEngine.h, CompareRegionList.h, GetRegions.h, methods.h, parameters.h, Region.h, SNP.h, VCFFilter.h.
 
-The create the applications by selecting the Build > Batch Build menu option and selecting a release version to run on either a 64 or 32 bit computer. 
+Then create the applications by selecting the Build > Batch Build menu option and selecting a release version to run on either a 64 or 32 bit computer. 
