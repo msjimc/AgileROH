@@ -27,12 +27,26 @@ The [Program > scripts](Program/scripts/README.md) page contains a python and ba
 #### Commands
 Both programs require similar commands, the structure of the commands (without optional parameters) to run ```AgileROHFinder``` and ```AgileROHFilterer``` are shown below and described in greater detail in the table.
 
+#### Basic commands with on optional parameters
+
 ```AgileROHFinder``` 
 > /path/AgileROHFinder.exe /data/in.vcf /data/out.txt -t 
 
 ```AgileROHFilterer```  
 
 > /path/AgileROHFilterer.exe /data/in.vcf /data/out.vcf /data/out.txt 500000 -t
+
+#### Command with all optional parameters
+
+
+```AgileROHFinder``` 
+> /path/AgileROHFinder.exe /data/in.vcf /data/out.txt -t -V -Y 2
+
+```AgileROHFilterer```  
+
+> /path/AgileROHFilterer.exe /data/in.vcf /data/out.vcf /data/out.txt 500000 -t  -V -Y 2
+
+___-V___ indicates the genotypes in the VCF are to be used, ___-Y___ includes variants without a RS ID and the final ___'2'___ leads to the second sample's data to be processed in a multi-sample VCF file.
 
 #### Note
 
