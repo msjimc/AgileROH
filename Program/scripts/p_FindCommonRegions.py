@@ -1,10 +1,14 @@
 #!/usr/bin/python
 import os, sys
 print(sys.version)
+
+slash=""
 if (os.name == 'nt'):
-    print("Windows")
+    print("OS is Windows")
+    slash="\\"
 else:
-    print(os.name)
+    print("OS is " + os.name)
+    slash="/"
 
 class DNARegion(object):
     """Describes the autozygousReion"""
@@ -63,18 +67,21 @@ def FilterList(list1, list2):
     return list3
 
 path = sys.argv[1] 
-if (path.endswith("/") == False):
-	path = path + "/"
+if (path.endswith(slash) == False):
+	path = path + slash
 
 dirs = os.listdir(path)
 sorted(dirs)
 
 listOfRegions = list()
 commonRegions = list()
+saveAs=open(path + "commonRegions.txt", "w")
+saveAs.write("Files:\n")
 
 for f in dirs:
-    if f.endswith(".txt"):
+    if f.endswith(".txt") and f != "commonRegions.txt":
         file = open(path + f, "r")
+        saveAs.write(f + "\n");
         for x in file:
             items = x.split("\t")
             if (len(items) == 4):
@@ -91,5 +98,9 @@ for f in dirs:
                 commonRegions = listOfRegions[:]
                 del listOfRegions[:]
 
+
+saveAs.write("Chromosome\tStart\tEnd\tLength\n")
+
 for x in commonRegions:
     print(str(x.chromosome) + '\t' + str(x.startPoint) + '\t' + str(x.endPoint) + '\t' + str(x.endPoint - x.startPoint))
+    saveAs.write(str(x.chromosome) + '\t' + str(x.startPoint) + '\t' + str(x.endPoint) + '\t' + str(x.endPoint - x.startPoint) + "\n")
