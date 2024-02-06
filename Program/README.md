@@ -6,6 +6,9 @@ It is possible to download the whole of this GitHub repository by selecting the 
 Figure 1
 
 <hr />
+
+### Downloading individual files
+
 The process of downloading the prebuilt programs may be more involved on a Windows computer. First navigate to the Program/Window folder and click on the required program (Figure 2)
 
 ![Figure 2](images/figure1.jpg)
