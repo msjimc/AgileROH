@@ -194,3 +194,74 @@ While many VCF files include read depth data for each variant, some VCF files do
 |![Figure 11](images/figure9.jpg) |
 
 ***Important note***: The results from this type of analysis were not investigated in the paper and so it is not supported. The quality of the results is highly likely to be dependant on the variant calling software and parameters used in its operation. 
+
+## Case Study: CHRNG 
+This case study describes the analysis of the data in the "sample data file
+/CHRNG-family.zip" file on a Linux system.
+
+Download the and unzip the ___CHRNG-family.zip___ file, placing the VCF files in and empty folder (Figure 12). Download and save the ___AgileROHFinder_bash_script.sh___ to the server (in this example the file is also in the data folder).
+
+![Figure 12](images/walkthrough1.jpg) 
+
+Figure 12
+
+Open a SSH terminal and navigate to the data folder and issue the analysis command (Figure 13). 
+
+![Figure 13](images/walkthrough2.jpg) 
+
+Figure 13
+
+In this example the command is: 
+
+> bash AgileROHFinder_bash_script.sh $HOME/myPrograms/AgileROH/AgileROHFinder.exe /nobackup/msjimc/agileroh/casestudy "-t -Y"
+
+where 
+|Parameter|Note|
+|-|-|
+|bash|Instructs the terminal to process a bash script|
+|AgileROHFinder_bash_script.sh|Name of script with 'relative' path|
+|$HOME/myPrograms/AgileROH/AgileROHFinder.exe|Location of the AgileROHFinder.exe program, in this case it is in a sub folder of my home directory|
+|/nobackup/msjimc/agileroh/casestudy|Name and path to data folder|
+| "___-t___ ___-Y___"| Formatting parameter with optional ___-Y___ parameter. Note the ___-t___ and ___-Y___ are in speech marks, if they are omitted only the -t parameter will be used|  
+
+As the script runs ```AgileROHFinder.exe``` analyses each data file it produces a series of outputs as described above (Figure 3).
+
+![Figure 14](images/walkthrough3.jpg)
+
+Figure 14
+
+When completed, each VCF file will have a matched text file containing its autozygous regions. These files can then be viewed or used to filter the variants in a subsequent downstream filtering step in the patient data analysis pipeline.
+
+![Figure 15](images/walkthrough4.jpg)
+
+Figure 15
+
+To view the regions common to the affected individuals, more the regions files for the affected samples to an empty folder and download the ___p_FindCommonRegions.py___ python script (Figure 16). 
+
+![Figure 16](images/walkthrough5.jpg)
+
+Figure 16
+
+From the SSH terminal issue the final command (Figure 17):
+
+![Figure 17](images/walkthrough6.jpg)
+
+Figure 17
+
+In this example the command is:
+
+>  python affecteds/p_FindCommonRegions.py affecteds/
+
+where:
+|Parameter|Note|
+|-|-|
+|python|Instructs the terminal to process a python script|
+|affecteds/p_FindCommonRegions.py| Name with path of the ___p_FindCommonRegions.py___ script|
+|affecteds/|The name with path to the folder of regions files|
+
+As the python script runs, it first displays the version and type of OS that the server is using. This allows the script to determine the type of filesystem and whether to to use "\" or "/".   
+The subsequent lines display the location and length of any common autozygous regions. This data is also saved a file called ___commonRegions.txt___ which also contains the list of file names used in the analysis (Figure 18).
+
+![Figure 18](images/walkthrough7.jpg)
+
+Figure 18
