@@ -89,15 +89,17 @@ As the programs run, the current status will be shown in the terminal window.
 
 ### A successful analysis:
 
-Figure 1: ```AgileROHFiinder```
 
-![Figure 1](images/figure1.jpg) 
 
-Figure 2: ```AgileROHFilterer```
+|Figure 1: ```AgileROHFiinder```|
+|-|
+|![Figure 1](images/figure1.jpg) |
 
-![Figure 2](images/figure2.jpg)
 
-Figure 1
+|Figure 2: ```AgileROHFilterer```|
+|-|
+|![Figure 2](images/figure2.jpg)|
+
 
 Figures 1 and 2 show a typical status report of the analysis of a exome vcf file by ```AgileROHFinder``` and ```AgileROHFilterer``` respectively where only variants with an RS id were used and their genotypes were calculated by the programs.   
 
@@ -131,7 +133,7 @@ Both ```AgileROHFilterer``` and ```AgileROHFinder``` will try to process the arg
 
 |Figure 4: Wrong input file|
 |-|
-|![Figure 43](images/figure3.jpg) |
+|![Figure 4](images/figure3.jpg) |
 
 Figure 4: Feedback if the input file is incorrectly entered. A similar message will be displayed if the program can not open the file because it is open for editing in another program or you don't have permission to write to the file.
 
@@ -139,7 +141,7 @@ Figure 4: Feedback if the input file is incorrectly entered. A similar message w
 
 |Figure 5: Folder does not exist
 |-|
-|![Figure 54](images/figure4.jpg) |
+|![Figure 5](images/figure4.jpg) |
 
 Figure 5: Feedback if the folder the export file is to be saved in does not exist. The programs can create results files, but will not create folders/directories.
 
