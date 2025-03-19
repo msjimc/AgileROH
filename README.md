@@ -115,6 +115,10 @@ Both ```AgileROHFilterer``` and ```AgileROHFinder``` will try to process the arg
 
 ## Failed analysis
 
+### Checking the input files with AgileMultideogramFileTester
+
+If the analysis fails, you can check your data files with  ```AgileMultideogramFileTester``` as described on it's [GitHub page](https://github.com/msjimc/AgileMultideogramFileTester).
+
 ### Error in command line structure
 Both ```AgileROHFilterer``` and ```AgileROHFinder``` will try to process the arguments as best as possible and may not always detect an error. A significant error that neither program will detect is the use of a data filename as an export filename, in which case the data file will be overwritten. Figure 3 shows the output from ```AgileROHFilterer``` if the 'n' value (number of bases by which a region is extended) is omitted or the arguments are in the wrong order. This message is very similar to the message displaced if the command line contains too few or too many arguments.
 
