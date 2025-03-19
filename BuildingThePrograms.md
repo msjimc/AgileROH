@@ -1,6 +1,6 @@
 ## AgileROHFinder and AgileROHFilter
 
-The source code can be used to build two applications that work on either Linux or Windows computers:
+The source code is in the [source code](../AgileROH/source%20code/) and can be used to build two applications that work on either Linux or Windows computers:
 
 ```AgileROHFinder```:- which identifies autozygous regions in either next generation sequencing variant data in (uncompressed) vcf files or microarray SNP genotype data.  
 or   
