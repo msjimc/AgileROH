@@ -1,6 +1,9 @@
 # AgileROHFinder and AgileROHFilterer
 Command line applications for the detection of autozygous regions from Exome or Affymetrix microarray SNP data.
 
+## Optimising data with your samples
+The programs use cutoff parameters derived from samples with both exome and microarray SNP genotype data. If you would like to optimise the application for your data/pipe line, please contact me and I'll try and help; however, please note the process is not trivial and requires access to significant computing power such as a University High performance computing, such as, [Aire](https://arc.leeds.ac.uk/platforms/aire/) at the University of Leeds.
+
 ## Data format
 AgileROHFinder identifies autozygous regions using genotype data formatted as either VCF files or Affymetrix genotype files (or older xls or birdseed) text files. Similarly, AgileROHFilterer will process a VCF file (but not microarray  genotype data), creating a second VCF that only contains variants within the autozygous regions. The format and required fields of the VCF and microarray input files is described [here](DataFormat.md).
 
