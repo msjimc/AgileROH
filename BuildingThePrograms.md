@@ -28,11 +28,12 @@ The source code has been compiled on a HPC running CentOS Linux release 7.9.2009
 |gnu/8.3.0|	g++ (GCC) 8.3.0|
 |gnu/12.3.0|	g++ (GCC) 12.3.0|
 
-Standard computers 
-The source code was also compiled on a stand-alone desktop PC running Fedora release 40 (Forty).   
+Standard computers   
+The source code was also compiled on a stand-alone desktop PC running an intel64 version of:  
+Fedora release 40 (Forty).   
 The command g++ --version displayed this version data as "___g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3)___".  
 
-Virtualized computers  
+Virtualized computers     
 The source code was also compiled on a Hyper-V virtual machine running ARM64 versions of:  
 Ubuntu 24.10 - Oracular:   
 The command g++ --version displayed this version data as "___g++ (Ubuntu 14.2.0-4ubuntu2)14.2.0___".  
