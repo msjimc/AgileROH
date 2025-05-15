@@ -19,6 +19,17 @@ Place all the source code files in an empty folder and navigate to it in a Bash 
 
 This should build the selected application with any errors stored in the error file. To see all the messages replace the '2>' with '>'.
 
+#### Compilers
+The source code has been compiled on a HPC running CentOS Linux release 7.9.2009 (Core) using the 4 different versions of g++ available as shown below:
+|Module|g++ version revealed with the command g++ --version|
+|-|-|
+|gnu/native|	g++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44)|
+|gnu/6.3.0|	g++ (GCC) 6.3.0|
+|gnu/8.3.0|	g++ (GCC) 8.3.0|
+|gnu/12.3.0|	g++ (GCC) 12.3.0|
+
+The source code was also compiled on a stand-alone server running Fedora release 40 (Forty). The command g++ --version displayed this version data as g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3). 
+
 ### Windows - Visual Studio 
 Create an empty C++ windows console application and select the required source code (*.cpp) and header (*.h) files. 
 
