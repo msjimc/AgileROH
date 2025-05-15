@@ -28,7 +28,7 @@ The source code has been compiled on a HPC running CentOS Linux release 7.9.2009
 |gnu/8.3.0|	g++ (GCC) 8.3.0|
 |gnu/12.3.0|	g++ (GCC) 12.3.0|
 
-Standard computers   
+Standard computer   
 The source code was also compiled on a stand-alone desktop PC running an intel64 version of:  
 Fedora release 40 (Forty).   
 The command g++ --version displayed this version data as "___g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3)___".  
