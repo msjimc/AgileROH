@@ -28,7 +28,19 @@ The source code has been compiled on a HPC running CentOS Linux release 7.9.2009
 |gnu/8.3.0|	g++ (GCC) 8.3.0|
 |gnu/12.3.0|	g++ (GCC) 12.3.0|
 
-The source code was also compiled on a stand-alone server running Fedora release 40 (Forty). The command g++ --version displayed this version data as g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3). 
+Standard computers 
+The source code was also compiled on a stand-alone desktop PC running Fedora release 40 (Forty).   
+The command g++ --version displayed this version data as "___g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3)___".  
+
+Virtualized computers  
+The source code was also compiled on a Hyper-V virtual machine running ARM64 versions of:  
+Ubuntu 24.10 - Oracular:   
+The command g++ --version displayed this version data as "___g++ (Ubuntu 14.2.0-4ubuntu2)14.2.0___".  
+Fedora Linux 42 (Workstation Edition):  
+The command g++ --version displayed this version data as "___g++ (GCC) 15.1.1 20250425 (Red Hat 15.1.1-1)___".   
+Debian GNU/Linux 12 (bookworm):  
+The command g++ --version displayed this version data as "___g++ (Debian 12.2.0-14) 12.2.0.___".     
+
 
 ### Windows - Visual Studio 
 Create an empty C++ windows console application and select the required source code (*.cpp) and header (*.h) files. 
