@@ -43,6 +43,8 @@ The source code was also compiled on 3 Hyper-V virtual machines running ARM64 ve
     * The command g++ --version displayed this version data as "___g++ (GCC) 15.1.1 20250425 (Red Hat 15.1.1-1)___".   
 - Debian GNU/Linux 12 (bookworm):  
     * The command g++ --version displayed this version data as "___g++ (Debian 12.2.0-14) 12.2.0.___". 
+- Rocky Linux 9.5 (Blue Onyx):
+    * The command g++ --version displayed this version data as "___g++ (GCC) 11.5.0 20240719 (Red Hat 11.5.0-5)___". 
 
 
 ### Windows - Visual Studio 
