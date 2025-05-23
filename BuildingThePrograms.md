@@ -23,29 +23,38 @@ This should build the selected application with any errors stored in the error f
 The source code has been compiled on a HPC running CentOS Linux release 7.9.2009 (Core) using the 4 different versions of g++ available as shown below:
 |Module|g++ version revealed with the command g++ --version|
 |-|-|
-|gnu/native|	g++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44)|
-|gnu/6.3.0|	g++ (GCC) 6.3.0|
-|gnu/8.3.0|	g++ (GCC) 8.3.0|
-|gnu/12.3.0|	g++ (GCC) 12.3.0|
+|gnu/native|__g++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44)__|
+|gnu/6.3.0|	__g++ (GCC) 6.3.0__|
+|gnu/8.3.0|	__g++ (GCC) 8.3.0__|
+|gnu/12.3.0|__g++ (GCC) 12.3.0__|
+
+The source code was also compiled on a second HPC running Rocky Linux 9.4 (Blue Onyx) using the 3 different versions of g++ available as shown below:
+|Module|g++ version revealed with the command g++ --version|
+|-|-|
+|Default installation|__g++ (GCC) 11.4.1 20231218 (Red Hat 11.4.1-3)__|
+|gcc/13.2.0|__g++ (GCC) 13.2.0__|
+|gcc/14.2.0 |__g++ (GCC) 14.2.0__|
+
 
 Standard computer   
 The source code was also compiled on a stand-alone desktop PC running an intel64 version of:  
 - Fedora release 40 (Forty).   
-    * The command g++ --version displayed this version data as "___g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3)___".  
+    * The command g++ --version displayed this version data as "__g++ (GCC) 14.2.2 20240912 (Red Hat 14.2.1-3)__".  
 
 Virtualized computers  
 The host OS was Windows 11 Pro running on a Snapdragon(R) X 12 core X1E80100 @ 3.40 GHz processor and the virtualization was performed using Hyper-V. Since the host used a ARM CPU, the Linux machines where all ARM64.    
 
 The source code was also compiled on 3 Hyper-V virtual machines running ARM64 versions of:  
 - Ubuntu 24.10 - Oracular:   
-    * The command g++ --version displayed this version data as "___g++ (Ubuntu 14.2.0-4ubuntu2)14.2.0___".  
+    * The command g++ --version displayed this version data as "__g++ (Ubuntu 14.2.0-4ubuntu2)14.2.0__".  
 - Fedora Linux 42 (Workstation Edition):  
-    * The command g++ --version displayed this version data as "___g++ (GCC) 15.1.1 20250425 (Red Hat 15.1.1-1)___".   
+    * The command g++ --version displayed this version data as "__g++ (GCC) 15.1.1 20250425 (Red Hat 15.1.1-1)__".   
 - Debian GNU/Linux 12 (bookworm):  
-    * The command g++ --version displayed this version data as "___g++ (Debian 12.2.0-14) 12.2.0.___". 
+    * The command g++ --version displayed this version data as "__g++ (Debian 12.2.0-14) 12.2.0.__". 
 - Rocky Linux 9.5 (Blue Onyx):
-    * The command g++ --version displayed this version data as "___g++ (GCC) 11.5.0 20240719 (Red Hat 11.5.0-5)___". 
-
+    * The command g++ --version displayed this version data as "__g++ (GCC) 11.5.0 20240719 (Red Hat 11.5.0-5)__". 
+- openSuse Tumbleweed:
+    * The command g++ --version displayed this version data as "__g++ (SUSE Linux) 14.2.1 20250430 [revision 3418d740b344e0ba38022f3bed90540ec3de35dd]__". 
 
 ### Windows - Visual Studio 
 Create an empty C++ windows console application and select the required source code (*.cpp) and header (*.h) files. 
