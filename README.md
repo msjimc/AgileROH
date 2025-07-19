@@ -1,6 +1,12 @@
 # AgileROHFinder and AgileROHFilterer
 Command line applications for the detection of autozygous regions from Exome or Affymetrix microarray SNP data.
 
+## Citation
+The underlying algorithm is covered in this paper; please cite it when possible:   
+Watson CM, Lascelles C, Raynor M, Elpidorou M, Hany U, Crinnion L, Johnson CA, Sheridan E, Markham AF, Poulter JA, Bonthron DT, Carr IM.  
+[AgileMultiIdeogram: Rapid identification and visualization of autozygous regions using Illumina short-read sequencing data.](https://www.mdpi.com/2079-7737/14/6/666)  
+Biology 2025, 14(6), 666
+
 ## Optimising data with your samples
 The programs use cutoff parameters derived from samples with both exome and microarray SNP genotype data. If you would like to optimise the application for your data/pipe line, please contact me and I'll try and help; however, please note the process is not trivial and requires access to significant computing power such as a University High performance computing, such as, [Aire](https://arc.leeds.ac.uk/platforms/aire/) at the University of Leeds.
 
